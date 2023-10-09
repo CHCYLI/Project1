@@ -38,6 +38,8 @@ public class Chess {
 	
 	enum Player { white, black }
 	
+	public static ArrayList<ReturnPiece> pieceMove = new ArrayList<ReturnPiece>();
+	
 	/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
@@ -52,10 +54,73 @@ public class Chess {
 		/* FILL IN THIS METHOD */
 		//System.out.println(move);
 		//ArrayList<ReturnPiece> pieces = ReturnPlay.piecesOnBoard;
+		ReturnPlay temp = new ReturnPlay();
+		ReturnPiece tempPiece = new ReturnPiece();
+		//System.out.println(move.charAt(1) - '0');
+		
+		for (int i = 0; i < pieceMove.size(); i++) {
+			if (pieceMove.get(i).pieceFile.toString().charAt(0) == move.charAt(0) &&
+				pieceMove.get(i).pieceRank == move.charAt(1) - '0') {
+					tempPiece.pieceType = pieceMove.get(i).pieceType; 
+					
+					tempPiece.pieceFile = findFile(move.charAt(3));
+					
+					tempPiece.pieceRank = move.charAt(4) - '0';
+					pieceMove.remove(i);
+					pieceMove.add(tempPiece);
+					
+					break;
+			}
+			//System.out.println("showsomething");
+			//System.out.println(move.charAt(3) + ""+ move.charAt(4));
+			//System.out.println(pieceMove.get(i).pieceFile.toString().charAt(0));
+		}
+		
+		temp.piecesOnBoard = pieceMove;
+		
 		
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
-		return null;
+		return temp;
+	}
+	
+	public static ReturnPiece.PieceFile findFile(char moveFile) { //convert char to PieceFile
+		ReturnPiece.PieceFile temp = ReturnPiece.PieceFile.a;
+		switch(moveFile) {
+		case 'a':
+			temp = ReturnPiece.PieceFile.a;
+			break;
+		
+		case 'b':
+			temp = ReturnPiece.PieceFile.b;
+			break;
+			
+		case 'c':
+			temp = ReturnPiece.PieceFile.c;
+			break;
+			
+		case 'd':
+			temp = ReturnPiece.PieceFile.d;
+			break;
+			
+		case 'e':
+			temp = ReturnPiece.PieceFile.e;
+			break;
+			
+		case 'f':
+			temp = ReturnPiece.PieceFile.f;
+			break;
+			
+		case 'g':
+			temp = ReturnPiece.PieceFile.g;
+			break;
+			
+		case 'h':
+			temp = ReturnPiece.PieceFile.h;
+			break;
+		}
+		
+		return temp;
 	}
 	
 	
@@ -208,8 +273,7 @@ public class Chess {
 			pieces.add(temp);
 		}
 		
-		//String[][] board = PlayChess.makeBlankBoard();
-		//PlayChess.printPiecesOnBoard(pieces, board);
+		pieceMove = pieces;
 		PlayChess.printBoard(pieces);
 	}
 }
