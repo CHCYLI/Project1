@@ -39,6 +39,10 @@ public class Chess {
 	enum Player { white, black }
 	
 	public static ArrayList<ReturnPiece> pieceMove = new ArrayList<ReturnPiece>();
+	//public static ArrayList<Boolean> isKingFirstMove = new ArrayList<Boolean>();
+	//public static ArrayList<Boolean> isRookFirstMove = new ArrayList<Boolean>();
+	public static boolean[] isRookFirstMove = new boolean[4]; //first 2 white, last 2 black, left first then right
+	public static boolean[] isKingFirstMove = new boolean[2]; //white first
 	
 	/**
 	 * Plays the next move for whichever player has the turn.
@@ -59,8 +63,8 @@ public class Chess {
 		//System.out.println(move.charAt(1) - '0');
 		
 		for (int i = 0; i < pieceMove.size(); i++) {
-			if (pieceMove.get(i).pieceFile.toString().charAt(0) == move.charAt(0) &&
-				pieceMove.get(i).pieceRank == move.charAt(1) - '0') {
+			if (pieceMove.get(i).pieceFile.toString().charAt(0) == move.charAt(0) && //column
+				pieceMove.get(i).pieceRank == move.charAt(1) - '0') { //row
 					tempPiece.pieceType = pieceMove.get(i).pieceType; 
 					
 					tempPiece.pieceFile = findFile(move.charAt(3));
@@ -68,6 +72,8 @@ public class Chess {
 					tempPiece.pieceRank = move.charAt(4) - '0';
 					pieceMove.remove(i);
 					pieceMove.add(tempPiece);
+					
+					castlingSetting(move);
 					
 					break;
 			}
@@ -82,6 +88,32 @@ public class Chess {
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
 		return temp;
+	}
+	
+	public static void castlingSetting(String move) {
+		if (move.charAt(0) == ReturnPiece.PieceFile.a.toString().charAt(0)) { //if left column rook
+			if (move.charAt(1) - '0' == 8) {//if left black rook
+				isRookFirstMove[2] = true;
+			} else if (move.charAt(1) - '0' == 1) { //left white rook
+				isRookFirstMove[0] = true;
+			}
+		}
+		
+		if (move.charAt(0) == ReturnPiece.PieceFile.h.toString().charAt(0)) { //if right column rook
+			if (move.charAt(1) - '0' == 8) {//if right black rook
+				isRookFirstMove[4] = true; 
+			} else if (move.charAt(1) - '0' == 1) { //right white rook
+				isRookFirstMove[1] = true;
+			}
+		}
+		
+		if (move.charAt(0) == ReturnPiece.PieceFile.e.toString().charAt(0)) { //if king
+			if (move.charAt(1) - '0' == 8) {//black rook
+				isKingFirstMove[1] = true; 
+			} else if (move.charAt(1) - '0' == 1) { //white rook
+				isKingFirstMove[0] = true;
+			}
+		}
 	}
 	
 	public static ReturnPiece.PieceFile findFile(char moveFile) { //convert char to PieceFile
@@ -274,6 +306,6 @@ public class Chess {
 		}
 		
 		pieceMove = pieces;
-		PlayChess.printBoard(pieces);
+		//PlayChess.printBoard(pieces);
 	}
 }
