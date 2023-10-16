@@ -7,13 +7,16 @@ public class Pawn extends Piece {
 	ReturnPiece capturedPiece;
 	
 	//isCapturable Vars
-	char tarColor = tarPiece.pieceType.toString().charAt(0); //'W' or 'B'
+	char tarColor;
 	
 	//enPassant
 	boolean hasMovedTwo = false;
 	
 	public Pawn(ReturnPiece currPiece, String move, ArrayList<ReturnPiece> list) {
 		super(currPiece,move,list);
+		if (tarPiece != null) {
+			tarColor = tarPiece.pieceType.toString().charAt(0); //'W' or 'B'
+		}
 	}
 	
 	public boolean isValidMove() {
@@ -116,6 +119,16 @@ public class Pawn extends Piece {
 					}
 				}
 			}
+		}
+		return false;
+		}
+	
+	public boolean canPromote() {
+		if (isWhite == 1 && currRank == 7 && tarRank == 8) {
+				return true;
+			}
+		else if (isWhite == 0 && currRank == 2 && tarRank == 1) {
+			return true;
 		}
 		return false;
 	}
