@@ -115,8 +115,8 @@ public class Queen extends Piece{
 	}
 	
 	public boolean isBlockedRook() {
-		//int fileDiff = tarFile - currFile; //xDiff
-		//int rankDiff = tarRank - currRank; //yDiff
+		int fileDiff = tarFile - currFile; //xDiff
+		int rankDiff = tarRank - currRank; //yDiff
 		for (int i = 0; i < piecesList.size(); i++) {
 			ReturnPiece checkingPiece = piecesList.get(i);
 			int checkingFile = checkingPiece.toString().charAt(0) - '`'; //numerical value of current file/rank checked

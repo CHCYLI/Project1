@@ -20,7 +20,7 @@ public class Piece extends Chess {
 		for (int i = 0; i < piecesList.size(); i++) {
 			ReturnPiece checkingPiece = piecesList.get(i);
 			if (tarFile == checkingPiece.toString().charAt(0)-'`' &&
-					tarRank == checkingPiece.toString().charAt(2)-'0') {
+			tarRank == checkingPiece.toString().charAt(2)-'0') {
 				tarPiece = checkingPiece;
 				break;
 			}

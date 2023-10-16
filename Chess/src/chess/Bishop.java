@@ -72,7 +72,7 @@ public class Bishop extends Piece{
 		return false;
 	}
 	
-	public boolean isBlock(int quadrant) {
+	public boolean isBlock() {
 		/*for (int i = 0; i < piecesList.size(); i++) {
 			char currPieceFile = piecesList.get(i).pieceFile.toString().charAt(i);
 			int currPieceRank = piecesList.get(i).pieceRank;

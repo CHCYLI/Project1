@@ -41,8 +41,8 @@ public class Chess {
 	public static ArrayList<ReturnPiece> piecesList = new ArrayList<ReturnPiece>();
 	//public static ArrayList<Boolean> isKingFirstMove = new ArrayList<Boolean>();
 	//public static ArrayList<Boolean> isRookFirstMove = new ArrayList<Boolean>();
-	public static boolean[] isRookFirstMove = new boolean[4]; //first 2 white, last 2 black, left first then right
-	public static boolean[] isKingFirstMove = new boolean[2]; //white first
+	public static boolean[] isRookFirstMove = {false, false, false, false}; //first 2 white, last 2 black, left first then right
+	public static boolean[] isKingFirstMove = {false, false}; //white first
 	
 	public static Chess.Player currPlayer = Chess.Player.white;
 	
@@ -76,6 +76,44 @@ public class Chess {
 			
 			if (currPiece.pieceFile.toString().charAt(0) == move.charAt(0) && //column
 				currPiece.pieceRank == move.charAt(1) - '0') { //row //find the chess
+				
+				/*****************************create chess type******************************/
+					if (currPiece.pieceType == ReturnPiece.PieceType.BK ||
+						currPiece.pieceType == ReturnPiece.PieceType.WK) { //if king, create king
+							King newKing = new King (currPiece, move, piecesList);
+							newKing.isValidMove();
+					}
+					
+					if (currPiece.pieceType == ReturnPiece.PieceType.BB ||
+						currPiece.pieceType == ReturnPiece.PieceType.WB) { //if bishop, create bishop
+							Bishop newBishop = new Bishop (currPiece, move, piecesList);
+							newBishop.isValidMove();
+					}
+					
+					if (currPiece.pieceType == ReturnPiece.PieceType.BN ||
+						currPiece.pieceType == ReturnPiece.PieceType.WN) { //if knight, create knight
+							Knight newKnight = new Knight (currPiece, move, piecesList);
+							newKnight.isValidMove();
+					}
+					
+					if (currPiece.pieceType == ReturnPiece.PieceType.BP ||
+						currPiece.pieceType == ReturnPiece.PieceType.WP) { //if pawn, create pawn
+							Pawn newPawn = new Pawn (currPiece, move, piecesList);
+							newPawn.isValidMove();
+					}
+					
+					if (currPiece.pieceType == ReturnPiece.PieceType.BQ ||
+						currPiece.pieceType == ReturnPiece.PieceType.WQ) { //if queen, create queen
+							Queen newQueen = new Queen (currPiece, move, piecesList);
+							newQueen.isValidMove();
+					}
+					
+					if (currPiece.pieceType == ReturnPiece.PieceType.BR||
+						currPiece.pieceType == ReturnPiece.PieceType.WR) { //if rook, create rook
+							Rook newRook = new Rook (currPiece, move, piecesList);
+							newRook.isValidMove();
+					}
+					/*****************************create chess type******************************/
 				
 					if (currPlayer.toString().charAt(0) - ' ' != currPiece.pieceType.toString().charAt(0)) { //if the players move their own chess or the other's
 						temp.piecesOnBoard = piecesList;
