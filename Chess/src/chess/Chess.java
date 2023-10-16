@@ -38,11 +38,13 @@ public class Chess {
 	
 	enum Player { white, black }
 	
-	public static ArrayList<ReturnPiece> pieceMove = new ArrayList<ReturnPiece>();
+	public static ArrayList<ReturnPiece> piecesList = new ArrayList<ReturnPiece>();
 	//public static ArrayList<Boolean> isKingFirstMove = new ArrayList<Boolean>();
 	//public static ArrayList<Boolean> isRookFirstMove = new ArrayList<Boolean>();
 	public static boolean[] isRookFirstMove = new boolean[4]; //first 2 white, last 2 black, left first then right
 	public static boolean[] isKingFirstMove = new boolean[2]; //white first
+	
+	public static Chess.Player currPlayer = Chess.Player.white;
 	
 	/**
 	 * Plays the next move for whichever player has the turn.
@@ -56,38 +58,141 @@ public class Chess {
 	public static ReturnPlay play(String move) {
 		
 		/* FILL IN THIS METHOD */
-		//System.out.println(move);
-		//ArrayList<ReturnPiece> pieces = ReturnPlay.piecesOnBoard;
+		if (move == "resign") return null; //resign, need revise here, what to return?
+		
+		
 		ReturnPlay temp = new ReturnPlay();
 		ReturnPiece tempPiece = new ReturnPiece();
-		//System.out.println(move.charAt(1) - '0');
 		
-		for (int i = 0; i < pieceMove.size(); i++) {
-			if (pieceMove.get(i).pieceFile.toString().charAt(0) == move.charAt(0) && //column
-				pieceMove.get(i).pieceRank == move.charAt(1) - '0') { //row
-					tempPiece.pieceType = pieceMove.get(i).pieceType; 
+		
+		if (move.charAt(0) == move.charAt(3) && move.charAt(1) == move.charAt(4)) { //same position
+			temp.piecesOnBoard = piecesList;
+			System.out.print(ReturnPlay.Message.ILLEGAL_MOVE);
+			return temp;
+		}
+		
+		for (int i = 0; i < piecesList.size(); i++) { //move chess
+			ReturnPiece currPiece = piecesList.get(i);
+			
+			if (currPiece.pieceFile.toString().charAt(0) == move.charAt(0) && //column
+				currPiece.pieceRank == move.charAt(1) - '0') { //row //find the chess
+				
+					if (currPlayer.toString().charAt(0) - ' ' != currPiece.pieceType.toString().charAt(0)) { //if the players move their own chess or the other's
+						temp.piecesOnBoard = piecesList;
+						System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+						return temp;
+					}
+				
+					if (currPiece.pieceType.toString() == "WK"|| currPiece.pieceType.toString() == "BK") { //check castling
+						King tempKing = new King(currPiece, move, piecesList);
+						if (tempKing.isCastle == true) {
+							castlingSetting(move);
+							if(castling(currPiece, move) == false) {
+								temp.piecesOnBoard = piecesList;
+								return temp;
+							}
+						}
+					} 
+				
+					/***********move*************/
+					tempPiece.pieceType = piecesList.get(i).pieceType; 
 					
 					tempPiece.pieceFile = findFile(move.charAt(3));
 					
 					tempPiece.pieceRank = move.charAt(4) - '0';
-					pieceMove.remove(i);
-					pieceMove.add(tempPiece);
+					piecesList.remove(i);
+					piecesList.add(tempPiece);
+					/***************move**************/
 					
-					castlingSetting(move);
+					/*************find enemy chess and kill it****************/
+					for (int j = 0; j < piecesList.size(); j++) {
+						if (piecesList.get(i) == currPiece) continue; //same chess as the current one skips
+						
+						ReturnPiece enemyPiece = piecesList.get(i);
+						if (enemyPiece.pieceFile.toString().charAt(0) == move.charAt(3) && //column
+							enemyPiece.pieceRank == move.charAt(4) - '0') { //there is an enemy chess, no need to check type because it was checked earlier
+								piecesList.remove(i);
+						}
+					}
+					/*************find enemy chess and kill it****************/
 					
+					if (move.length() == 11 && move.substring(6, 11) == "draws?") { //propose draw
+						System.out.print(ReturnPlay.Message.DRAW);
+						return null; //need revise here, return ?
+					}
 					break;
 			}
-			//System.out.println("showsomething");
-			//System.out.println(move.charAt(3) + ""+ move.charAt(4));
-			//System.out.println(pieceMove.get(i).pieceFile.toString().charAt(0));
+			
+			
 		}
 		
-		temp.piecesOnBoard = pieceMove;
+		temp.piecesOnBoard = piecesList;
+		
+		if (currPlayer == Chess.Player.white) { //switch side
+			currPlayer = Chess.Player.black;
+		} else {
+			currPlayer = Chess.Player.white;
+		}
 		
 		
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
 		return temp;
+	}
+	
+	public static boolean castling(ReturnPiece currPiece, String Move) {
+
+		if (currPiece.pieceType == ReturnPiece.PieceType.BK) {//if black king
+			if ((Move.charAt(0) == ReturnPiece.PieceFile.e.toString().charAt(0) && Move.charAt(1) - '0' == 8) &&
+				(Move.charAt(3) == ReturnPiece.PieceFile.c.toString().charAt(0) && Move.charAt(4) - '0' == 8) &&
+				isKingFirstMove[1] == false && isRookFirstMove[2] == false) {  //castling with left black rook
+				
+				for (int i = 0; i < piecesList.size(); i++) {
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.b.toString().charAt(0) && piecesList.get(i).pieceRank == 8) return false;
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.c.toString().charAt(0) && piecesList.get(i).pieceRank == 8) return false;
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.d.toString().charAt(0) && piecesList.get(i).pieceRank == 8) return false;
+				}
+					return true;
+			}
+			
+			if ((Move.charAt(0) == ReturnPiece.PieceFile.e.toString().charAt(0) && Move.charAt(1) - '0' == 8) &&
+				(Move.charAt(3) == ReturnPiece.PieceFile.g.toString().charAt(0) && Move.charAt(4) - '0' == 8) &&
+				isKingFirstMove[1] == false && isRookFirstMove[3] == false) {  //castling with right black rook
+				
+				for (int i = 0; i < piecesList.size(); i++) {
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.f.toString().charAt(0) && piecesList.get(i).pieceRank == 8) return false;
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.g.toString().charAt(0) && piecesList.get(i).pieceRank == 8) return false;
+				}
+					return true;
+			}
+		}
+		
+		if (currPiece.pieceType == ReturnPiece.PieceType.WK) {//if black king
+			if ((Move.charAt(0) == ReturnPiece.PieceFile.e.toString().charAt(0) && Move.charAt(1) - '0' == 1) &&
+				(Move.charAt(3) == ReturnPiece.PieceFile.c.toString().charAt(0) && Move.charAt(4) - '0' == 1) &&
+				isKingFirstMove[1] == false && isRookFirstMove[2] == false) {  //castling with left white rook
+				
+				for (int i = 0; i < piecesList.size(); i++) {
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.b.toString().charAt(0) && piecesList.get(i).pieceRank == 1) return false;
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.c.toString().charAt(0) && piecesList.get(i).pieceRank == 1) return false;
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.d.toString().charAt(0) && piecesList.get(i).pieceRank == 1) return false;
+				}
+					return true;
+			}
+				
+			if ((Move.charAt(0) == ReturnPiece.PieceFile.e.toString().charAt(0) && Move.charAt(1) - '0' == 1) &&
+				(Move.charAt(3) == ReturnPiece.PieceFile.g.toString().charAt(0) && Move.charAt(4) - '0' == 1) &&
+				isKingFirstMove[1] == false && isRookFirstMove[3] == false) {  //castling with right white rook
+				
+				for (int i = 0; i < piecesList.size(); i++) {
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.f.toString().charAt(0) && piecesList.get(i).pieceRank == 1) return false;
+					if (piecesList.get(i).pieceFile.toString().charAt(i) == ReturnPiece.PieceFile.g.toString().charAt(0) && piecesList.get(i).pieceRank == 1) return false;
+				}
+					return true;
+			}
+		}
+
+		return false;
 	}
 	
 	public static void castlingSetting(String move) {
@@ -305,7 +410,7 @@ public class Chess {
 			pieces.add(temp);
 		}
 		
-		pieceMove = pieces;
+		piecesList = pieces;
 		//PlayChess.printBoard(pieces);
 	}
 }

@@ -3,14 +3,49 @@ package chess;
 import java.util.ArrayList;
 
 public class King extends Piece{
-	private ReturnPiece pieceMove;
+	
+boolean isCastle = false;
+	
+	public King(ReturnPiece currPiece, String move, ArrayList<ReturnPiece> list) {
+		super(currPiece, move, list); 
+	}
+	
+	public boolean isValidMove() {
+
+		if (currPiece.pieceType != ReturnPiece.PieceType.WK || currPiece.pieceType != ReturnPiece.PieceType.BK) { // if king
+			return false;
+		}
+		
+		if (!this.isBlocked()) {
+			int fileDiff = Math.abs(tarFile - currFile); int rankDiff = Math.abs(tarRank - currRank);
+			if (rankDiff == 0 && fileDiff == 2) {
+				isCastle = true;
+				return true;
+			}
+			
+			if (fileDiff == 1 || rankDiff == 1) {
+				if (fileDiff*rankDiff == 1 || fileDiff*rankDiff == 0)
+					isCastle = false;
+					return true;
+			}
+		}
+		return false;		
+	}
+	
+	public boolean isInCheck() {
+		//Horizontally: R/Q
+		//Diagonally
+		ReturnPiece checkingPiece;
+		return true;
+	}
+	/*private ReturnPiece pieceMove;
 	private String Move;
 	private ArrayList<ReturnPiece> piecesList;
 	private boolean[] isKingFirstMove;
 	private boolean[] isRookFirstMove;
 	
 	public King(ReturnPiece piecemove, String move, ArrayList<ReturnPiece> list, boolean[] isRookFirst, boolean[] isKingFirst) {
-		super(piecemove, move, list, isRookFirst, isKingFirst);
+		super(piecemove, move, list);
 		pieceMove = piecemove;
 		Move = move;
 		piecesList = list;
@@ -43,15 +78,15 @@ public class King extends Piece{
 			}
 		}
 		
-		if (diagonalMove == 1 || UpDownMove == 1 || castling() == true) {
+		if (diagonalMove == 1 || UpDownMove == 1) {
 			return true;
 		} else {
 			return false;
 		}
 		
-	}
+	}*/
 	
-	public boolean castling() {
+	/*public boolean castling() {
 
 		if (pieceMove.pieceType == ReturnPiece.PieceType.BK) {//if black king
 			if ((Move.charAt(0) == ReturnPiece.PieceFile.e.toString().charAt(0) && Move.charAt(1) - '0' == 8) &&
@@ -104,11 +139,6 @@ public class King extends Piece{
 		}
 
 		return false;
-	}
-	
-	public boolean check() { //list all possibilities of getting killed by different kinds of chesses
-		
-		return false;
-	}
+	}*/
 }
 
