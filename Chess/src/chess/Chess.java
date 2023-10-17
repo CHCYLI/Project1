@@ -202,12 +202,17 @@ public class Chess {
 					
 					/*************find enemy chess and kill it****************/
 					for (int j = 0; j < piecesList.size(); j++) {
-						if (piecesList.get(i) == currReturnPiece) continue; //same chess as the current one skips
+						if (piecesList.get(i) == currReturnPiece) {
+							//same chess as the current one skips
+							if (j == piecesList.size()-1) break;
+							continue;
+						}
 						
 						ReturnPiece enemyPiece = piecesList.get(i);
 						if (enemyPiece.pieceFile.toString().charAt(0) == move.charAt(3) && //column
 							enemyPiece.pieceRank == move.charAt(4) - '0') { //there is an enemy chess, no need to check type because it was checked earlier
 								piecesList.remove(i);
+								break;
 						}
 					}
 					/*************find enemy chess and kill it****************/

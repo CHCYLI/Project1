@@ -3,61 +3,11 @@ package chess;
 import java.util.ArrayList;
 
 public class Queen extends Piece{
-	//private ReturnPiece pieceMove;
-	//private String Move;
-	private ArrayList<ReturnPiece> piecesList;
-	
-	/*public Queen(ReturnPiece piecemove, String move, ArrayList<ReturnPiece> list, boolean[] isRookFirstMove, boolean[] isKingFirstMove) {
-		super(piecemove, move, list);
-		pieceMove = piecemove;
-		Move = move;
-		piecesList = list;
-	}
-	
-	public boolean isValidMove() {
-		int rookcheck = 0, bishopcheck = 0;
-		if (pieceMove.pieceType != ReturnPiece.PieceType.WQ || pieceMove.pieceType != ReturnPiece.PieceType.BQ) { // if queen
-			return false;
-		}
-		
-		//*************************** Bishop
-		int quadrant = 0;
-		if (Math.abs((Move.charAt(1) - '0') - Move.charAt(4) - '0') == //row
-			Math.abs(Move.charAt(0) - Move.charAt(3))) { //column
-				if (Move.charAt(0) < Move.charAt(3) && Move.charAt(1) < Move.charAt(4)) quadrant = 1; //upper right
-				if (Move.charAt(0) > Move.charAt(3) && Move.charAt(1) < Move.charAt(4)) quadrant = 2; //upper left
-				if (Move.charAt(0) > Move.charAt(3) && Move.charAt(1) > Move.charAt(4)) quadrant = 3; //lower left
-				if (Move.charAt(0) < Move.charAt(3) && Move.charAt(1) > Move.charAt(4)) quadrant = 4; //lower right
-				bishopcheck = 1;
-		}
-		
-		//******************************* Rook
-		boolean isHorizontal = false;
-		if ((pieceMove.pieceFile.toString().charAt(0) != Move.charAt(3) && (Move.charAt(4)- '0') == pieceMove.pieceRank) || //horizontal move
-			(pieceMove.pieceFile.toString().charAt(0) == Move.charAt(3) && (Move.charAt(4)- '0') != pieceMove.pieceRank)) { //vertical move
-				if (pieceMove.pieceFile.toString().charAt(0) != Move.charAt(3) && (Move.charAt(4)- '0') == pieceMove.pieceRank) isHorizontal = true;
-				rookcheck = 1;
-		}
-		
-		
-		if (rookcheck == 1) {
-			return isBlockedRook();
-		} else if (bishopcheck == 1) {
-			return isBlockedBishop();
-		} else {
-			return false;
-		}
-	}*/
-	
 	public Queen(ReturnPiece currPiece, String move, ArrayList<ReturnPiece> list) {
-		super(currPiece, move, list);
+		super(currPiece,move,list);
 	}
 	
-	public boolean isValidMove() {
-		/*if (currPiece.pieceType != ReturnPiece.PieceType.WQ || currPiece.pieceType != ReturnPiece.PieceType.BQ) { // if queen
-			return false;
-		}*/
-		
+	public boolean isValidMove() {		
 		int fileDiff = tarFile - currFile;
 		int rankDiff = tarRank - currRank;
 		
@@ -75,6 +25,34 @@ public class Queen extends Piece{
 		}
 		return false;
 	}
+		/*
+		//*************************** Bishop
+		int quadrant = 0;
+		if (Math.abs((Move.charAt(1) - '0') - Move.charAt(4) - '0') == //row
+			Math.abs(Move.charAt(0) - Move.charAt(3))) { //column
+				if (Move.charAt(0) < Move.charAt(3) && Move.charAt(1) < Move.charAt(4)) quadrant = 1; //upper right
+				if (Move.charAt(0) > Move.charAt(3) && Move.charAt(1) < Move.charAt(4)) quadrant = 2; //upper left
+				if (Move.charAt(0) > Move.charAt(3) && Move.charAt(1) > Move.charAt(4)) quadrant = 3; //lower left
+				if (Move.charAt(0) < Move.charAt(3) && Move.charAt(1) > Move.charAt(4)) quadrant = 4; //lower right
+				bishopcheck = 1;
+		}
+		
+		//******************************* Rook
+		boolean isHorizontal = false;
+		if ((currPiece.pieceFile.toString().charAt(0) != Move.charAt(3) && (Move.charAt(4)- '0') == currPiece.pieceRank) || //horizontal move
+			(currPiece.pieceFile.toString().charAt(0) == Move.charAt(3) && (Move.charAt(4)- '0') != currPiece.pieceRank)) { //vertical move
+				if (currPiece.pieceFile.toString().charAt(0) != Move.charAt(3) && (Move.charAt(4)- '0') == currPiece.pieceRank) isHorizontal = true;
+				rookcheck = 1;
+		}
+		
+		
+		if (rookcheck == 1) {
+			return isBlockedRook(isHorizontal);
+		} else if (bishopcheck == 1) {
+			return isBlockedBishop(quadrant);
+		} else {
+			return false;
+		}*/
 	
 	public boolean isBlockedBishop() {
 		int fileDiff = tarFile - currFile; //xDiff
@@ -154,7 +132,7 @@ public class Queen extends Piece{
 				char currPieceFile = piecesList.get(i).pieceFile.toString().charAt(i);
 				int currPieceRank = piecesList.get(i).pieceRank;
 				
-				if (piecesList.get(i).equals(pieceMove) || //if the same as original chess,
+				if (piecesList.get(i).equals(currPiece) || //if the same as original chess,
 					(currPieceFile == Move.charAt(3) && currPieceRank == Move.charAt(4))) { // or same as target chess skip this one
 					continue;
 				}
@@ -178,7 +156,7 @@ public class Queen extends Piece{
 				char currPieceFile = piecesList.get(i).pieceFile.toString().charAt(i);
 				int currPieceRank = piecesList.get(i).pieceRank;
 				
-				if (piecesList.get(i).equals(pieceMove) || //if the same as original chess,
+				if (piecesList.get(i).equals(currPiece) || //if the same as original chess,
 					(currPieceFile == Move.charAt(3) && currPieceRank == Move.charAt(4))) { // or same as target chess skip this one
 						continue;
 					}
@@ -196,9 +174,6 @@ public class Queen extends Piece{
 				}
 			}
 		}
-		
-		return true;
-		
 	}
 	
 	public boolean isBlockedBishop(int quadrant) {

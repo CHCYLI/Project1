@@ -72,42 +72,7 @@ public class Bishop extends Piece{
 		return false;
 	}
 	
-	public boolean isBlock() {
-		/*for (int i = 0; i < piecesList.size(); i++) {
-			char currPieceFile = piecesList.get(i).pieceFile.toString().charAt(i);
-			int currPieceRank = piecesList.get(i).pieceRank;
-			
-			if (quadrant == 1) {
-				if ((Move.charAt(3) - currPieceFile) == (Move.charAt(4)-'0' - currPieceRank) && //if diagonal
-					currPieceFile < Move.charAt(3) && currPieceRank < Move.charAt(4) -'0' && //target and original
-					currPieceFile > Move.charAt(0) && currPieceRank > Move.charAt(1)- '0') { //if between
-					return false;
-				}
-				
-			} else if (quadrant == 2) {
-				if (Math.abs((Move.charAt(3) - currPieceFile)) == (Move.charAt(4)-'0' - currPieceRank) && //if diagonal
-						currPieceFile > Move.charAt(3) && currPieceRank < Move.charAt(4) -'0' &&
-						currPieceFile < Move.charAt(0) && currPieceRank > Move.charAt(1)- '0') { //if between
-						return false;
-					}
-				
-			} else if (quadrant == 3) {
-				if (Math.abs((Move.charAt(3) - currPieceFile)) == Math.abs((Move.charAt(4)-'0' - currPieceRank)) && //if diagonal
-						currPieceFile > Move.charAt(3) && currPieceRank > Move.charAt(4) -'0' &&
-						currPieceFile < Move.charAt(0) && currPieceRank < Move.charAt(1)- '0') { //if between
-						return false;
-					}
-			
-			} else if (quadrant == 4) {
-				if ((Move.charAt(3) - currPieceFile) == Math.abs((Move.charAt(4)-'0' - currPieceRank)) && //if diagonal
-						currPieceFile < Move.charAt(3) && currPieceRank > Move.charAt(4) -'0' &&
-						currPieceFile > Move.charAt(0) && currPieceRank < Move.charAt(1)- '0') { //if between
-						return false;
-					}
-				
-			}
-		}*/
-		
+	public boolean isBlocked() {
 		int fileDiff = tarFile - currFile; //xDiff
 		int rankDiff = tarRank - currRank; //yDiff
 		for (int i = 0; i < piecesList.size(); i++) {
@@ -142,7 +107,6 @@ public class Bishop extends Piece{
 				
 			}
 		}
-		
-		return true;
+		return false;
 	}
 }
