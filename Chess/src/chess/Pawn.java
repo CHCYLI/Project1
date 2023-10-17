@@ -20,25 +20,28 @@ public class Pawn extends Piece {
 		}
 	}
 	
+	
+	
 	public boolean isValidMove() {
-		if (currPiece.pieceType != ReturnPiece.PieceType.WP || currPiece.pieceType != ReturnPiece.PieceType.BP) {
-			return false;
-		}
-		
 		if (!this.isBlocked() && tarFile == currFile) { //target cell is empty & in same column(file)
 			//white
+			//System.out.println(isWhite + "AZHA");
 			if (isWhite == 1) {
 				if (currRank == 2 && tarRank == currRank + 2) { //first move: can move 2
 					ReturnPiece checkingPiece = null;
+					//System.out.println("Move Two");
 					for (int i = 0; i < piecesList.size(); i++) {
-						checkingPiece = piecesList.get(i);
-						int checkingFile = checkingPiece.toString().charAt(0) - '`';
-						int checkingRank = checkingPiece.toString().charAt(1) - '0';
+						//checkingPiece = piecesList.get(i);
+						int checkingFile = piecesList.get(i).toString().charAt(0) - '`';
+						int checkingRank = piecesList.get(i).toString().charAt(1) - '0';
 						if (checkingFile == currFile && checkingRank == currRank + 1) {
+							System.out.println("Break");
+							checkingPiece = piecesList.get(i);
 							break; //current checkingPiece is the blocking piece
 						}
 					}
 					if (Objects.isNull(checkingPiece)) { //if no blocking piece
+						//System.out.println("Confirm!");
 						hasMovedTwo = true;
 						return true;
 					}
@@ -50,13 +53,15 @@ public class Pawn extends Piece {
 			}
 			//black
 			else if (isWhite == 0) {
-				if (currRank == 2 && tarRank == currRank + 2) {
+				if (currRank == 7 && tarRank == currRank - 2) {
 					ReturnPiece checkingPiece = null;
+					//System.out.println("Move Two black");
 					for (int i = 0; i < piecesList.size(); i++) {
-						checkingPiece = piecesList.get(i);
-						int checkingFile = checkingPiece.toString().charAt(0) - '`';
-						int checkingRank = checkingPiece.toString().charAt(1) - '0';
+						//checkingPiece = piecesList.get(i);
+						int checkingFile = piecesList.get(i).toString().charAt(0) - '`';
+						int checkingRank = piecesList.get(i).toString().charAt(1) - '0';
 						if (checkingFile == currFile && checkingRank == currRank - 1) {
+							checkingPiece = piecesList.get(i);
 							break; //current checkingPiece is the blocking piece
 						}
 					}

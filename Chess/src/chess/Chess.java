@@ -58,7 +58,19 @@ public class Chess {
 	public static ReturnPlay play(String move) {
 		
 		/* FILL IN THIS METHOD */
-		if (move == "resign") return null; //resign, need revise here, what to return?
+		if (move.length() == 6 && move.charAt(0) == 'r' && move.charAt(1) == 'e' && move.charAt(2) == 's' && move.charAt(3) == 'i' 
+				&& move.charAt(4) == 'g' && move.charAt(5) == 'n') {
+			//System.out.println("resign here");
+			ReturnPlay tempPlay = new ReturnPlay();
+			tempPlay.piecesOnBoard = piecesList;
+			if (currPlayer == Chess.Player.white) {
+				tempPlay.message = ReturnPlay.Message.RESIGN_BLACK_WINS;
+			} else {
+				tempPlay.message = ReturnPlay.Message.RESIGN_WHITE_WINS;
+			}
+			
+			return tempPlay;
+		} //resign, need revise here, what to return?
 		
 		ReturnPlay temp = new ReturnPlay();
 		ReturnPiece tempPiece = new ReturnPiece();
@@ -98,7 +110,7 @@ public class Chess {
 							thisPiece = new King (currReturnPiece, move, piecesList);
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 								return temp;
 							}
 					}
@@ -108,7 +120,7 @@ public class Chess {
 							thisPiece = new Bishop (currReturnPiece, move, piecesList);
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 								return temp;
 							}
 					}
@@ -118,7 +130,7 @@ public class Chess {
 							thisPiece = new Knight (currReturnPiece, move, piecesList);
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 								return temp;
 							}
 					}
@@ -128,7 +140,8 @@ public class Chess {
 							thisPiece = new Pawn (currReturnPiece, move, piecesList);
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+								//System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
 								return temp;
 							}
 					}
@@ -138,7 +151,7 @@ public class Chess {
 							thisPiece = new Queen (currReturnPiece, move, piecesList);
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 								return temp;
 							}
 					}
@@ -148,36 +161,51 @@ public class Chess {
 							thisPiece = new Rook (currReturnPiece, move, piecesList);
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 								return temp;
 							}
 					}
 					else { //no Piece on that tile
 						temp.piecesOnBoard = piecesList;
-						System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+						temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 						return temp;
 					}
-					
-					boolean requestedMoveValid = thisPiece.isValidMove();
-					System.out.println("testmessage");
-					System.out.println(thisPiece == null);
+					//System.out.println("HELLO");
+					//boolean requestedMoveValid = thisPiece.isValidMove(); 
+					//System.out.println("testmessage");
+					//System.out.println(thisPiece == null);
 					/**create chess type**/
 					
 					//if currColor != playerColor
 					if (thisPiece.isWhite != playerIsWhite) {
 						temp.piecesOnBoard = piecesList;
-						System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+						temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 						return temp;
 					}
 					
 					////if currColor != playerColor
 					if (thisPiece.tarFile > 8 || thisPiece.tarFile < 1 || thisPiece.tarRank > 8 || thisPiece.tarRank < 1) {
 						temp.piecesOnBoard = piecesList;
-						System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+						temp.message = ReturnPlay.Message.ILLEGAL_MOVE; 
 						return temp;
 					}
+					/**********************check if friendly before move*************/
+					for (int j = 0; j < piecesList.size(); j++) {
+						ReturnPiece targetPiece = piecesList.get(j);
+						if (targetPiece.pieceFile.toString().charAt(0) == move.charAt(3) &&
+							targetPiece.pieceRank == move.charAt(4) - '0') {
+							if (targetPiece.pieceType.toString().charAt(0) == currReturnPiece.pieceType.toString().charAt(0)) {
+								temp.piecesOnBoard = piecesList;
+								System.out.println("Trigger");
+								temp.message = ReturnPlay.Message.ILLEGAL_MOVE; 
+								return temp;
+							}
+						}
+						
+					}
+					/**********************check if friendly before move*************/
 					
-					/**move**/
+					/**move*************************/
 					tempPiece.pieceType = currReturnPiece.pieceType; 
 					
 					tempPiece.pieceFile = findFile(move.charAt(3));
@@ -185,7 +213,7 @@ public class Chess {
 					tempPiece.pieceRank = move.charAt(4) - '0';
 					piecesList.remove(i);
 					piecesList.add(tempPiece);
-					/**move**/
+					/**move**************************/
 				
 					if (currReturnPiece.pieceType.toString() == "WK"|| currReturnPiece.pieceType.toString() == "BK") { //check castling
 						King tempKing = new King(currReturnPiece, move, piecesList);
@@ -209,17 +237,25 @@ public class Chess {
 						}
 						
 						ReturnPiece enemyPiece = piecesList.get(i);
+						/*if (enemyPiece.pieceType.toString().charAt(0) == currReturnPiece.pieceType.toString().charAt(0)) {
+							temp.piecesOnBoard = piecesList;
+							temp.message = ReturnPlay.Message.ILLEGAL_MOVE; 
+							return temp;
+						}*/
+						
 						if (enemyPiece.pieceFile.toString().charAt(0) == move.charAt(3) && //column
-							enemyPiece.pieceRank == move.charAt(4) - '0') { //there is an enemy chess, no need to check type because it was checked earlier
+							enemyPiece.pieceRank == move.charAt(4) - '0') { 
 								piecesList.remove(i);
 								break;
 						}
 					}
 					/*************find enemy chess and kill it****************/
 					
-					if (move.length() == 11 && move.substring(6, 11) == "draw?") { //propose draw
-						System.out.print(ReturnPlay.Message.DRAW);
-						return null; //need revise here, return ?
+					if (move.length() == 11 && move.charAt(6) == 'd' && move.charAt(7) == 'r' && move.charAt(8) == 'a' && move.charAt(9) =='w'
+						&& move.charAt(10) == '?') { //propose draw
+						temp.piecesOnBoard = piecesList;
+						temp.message = ReturnPlay.Message.DRAW; 
+						return temp;
 					}
 					break;
 			}
