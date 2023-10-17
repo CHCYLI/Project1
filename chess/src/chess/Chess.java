@@ -403,7 +403,7 @@ public class Chess {
 						
 						int checkCount = 0;
 						for (int cm = 0; cm < canMove.length; cm++) {
-							if (canMove[i] == false) 
+							if (canMove[i-1] == false) 
 								checkCount++;
 						}
 						if (checkCount == 8) {
