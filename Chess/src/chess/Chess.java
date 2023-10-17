@@ -77,7 +77,8 @@ public class Chess {
 		
 		if (move.charAt(0) == move.charAt(3) && move.charAt(1) == move.charAt(4)) { //same position
 			temp.piecesOnBoard = piecesList;
-			System.out.print(ReturnPlay.Message.ILLEGAL_MOVE);
+			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			System.out.println("same position");
 			return temp;
 		}
 		
@@ -111,6 +112,7 @@ public class Chess {
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
 								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+								System.out.println("king");
 								return temp;
 							}
 					}
@@ -121,6 +123,7 @@ public class Chess {
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
 								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+								System.out.println("bishop");
 								return temp;
 							}
 					}
@@ -131,6 +134,7 @@ public class Chess {
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
 								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+								System.out.println("knight");
 								return temp;
 							}
 					}
@@ -141,7 +145,7 @@ public class Chess {
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
 								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
-								//System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+								System.out.println("pawn");
 								return temp;
 							}
 					}
@@ -152,6 +156,7 @@ public class Chess {
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
 								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+								System.out.println("queen");
 								return temp;
 							}
 					}
@@ -162,12 +167,14 @@ public class Chess {
 							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
 								temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+								System.out.println("rook");
 								return temp;
 							}
 					}
 					else { //no Piece on that tile
 						temp.piecesOnBoard = piecesList;
 						temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+						System.out.println("Nope!");
 						return temp;
 					}
 					//System.out.println("HELLO");
@@ -180,13 +187,15 @@ public class Chess {
 					if (thisPiece.isWhite != playerIsWhite) {
 						temp.piecesOnBoard = piecesList;
 						temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+						System.out.println("currcolor != playercolor");
 						return temp;
 					}
 					
-					////if currColor != playerColor
+					////out of bounds
 					if (thisPiece.tarFile > 8 || thisPiece.tarFile < 1 || thisPiece.tarRank > 8 || thisPiece.tarRank < 1) {
 						temp.piecesOnBoard = piecesList;
 						temp.message = ReturnPlay.Message.ILLEGAL_MOVE; 
+						System.out.println("out of bound");
 						return temp;
 					}
 					/**********************check if friendly before move*************/
@@ -196,7 +205,7 @@ public class Chess {
 							targetPiece.pieceRank == move.charAt(4) - '0') {
 							if (targetPiece.pieceType.toString().charAt(0) == currReturnPiece.pieceType.toString().charAt(0)) {
 								temp.piecesOnBoard = piecesList;
-								System.out.println("Trigger");
+								System.out.println("Trigger friendly check");
 								temp.message = ReturnPlay.Message.ILLEGAL_MOVE; 
 								return temp;
 							}
@@ -260,11 +269,12 @@ public class Chess {
 					break;
 			}
 			
-			
+		//space check
 		}
 		if (spaceCheck == false) {
 			temp.piecesOnBoard = piecesList;
-			System.out.print("something here"+ReturnPlay.Message.ILLEGAL_MOVE); 
+			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			System.out.print("space error"); 
 			return temp;
 		}
 		

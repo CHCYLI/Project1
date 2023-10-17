@@ -49,7 +49,8 @@ public class Rook extends Piece{
 		}*/
 		
 		if (!this.isBlocked()) {
-			if (tarFile == currFile ^ tarRank == currRank) { //same file XOR same rank
+			if ((tarFile == currFile && tarRank != currRank) ||
+				(tarFile != currFile && tarRank == currRank)) { //same file XOR same rank
 				return true;
 			}
 		}
@@ -115,27 +116,27 @@ public class Rook extends Piece{
 			int checkingFile = checkingPiece.toString().charAt(0) - '`';
 			int checkingRank = checkingPiece.toString().charAt(1) - '0';
 			int checkingIsWhite = 0;
-			if (checkingPiece.toString().charAt(3) == 'W') checkingIsWhite = 1;
-			else if (checkingPiece.toString().charAt(3) == 'B') checkingIsWhite = 0;
+			if (checkingPiece.pieceType.toString().charAt(0) == 'W') checkingIsWhite = 1;
+			else if (checkingPiece.pieceType.toString().charAt(0) == 'B') checkingIsWhite = 0;
 			
-			if (checkingIsWhite == isWhite) {
+			
 				if (checkingRank == currRank && checkingFile != currFile) { //horiz
-					if (tarRank > currRank && checkingFile < tarFile) { //block right
+					if (checkingFile > currFile && checkingFile < tarFile) { //block right
 						return true;
 					}
-					else if (tarRank < currRank && checkingFile > tarFile) { //left
+					else if (checkingFile < currFile && checkingFile > tarFile) { //left
 						return true;
 					}
 				}
 				else if (checkingFile == currFile && checkingRank != currRank) { //vert
-					if (tarRank > currRank && checkingRank < tarRank) { //up
+					if (tarRank > checkingRank && checkingRank > currRank) { //up
 						return true;
 					}
-					else if (tarRank < currRank && checkingRank > tarRank) { //down
+					else if (tarRank < checkingRank && checkingRank < currRank) { //down
 						return true;
 					}
 				}
-			}
+			
 		}
 		return false; //if no blockage detected
 	}
