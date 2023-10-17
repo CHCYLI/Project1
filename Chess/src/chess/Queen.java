@@ -54,9 +54,9 @@ public class Queen extends Piece{
 	}
 	
 	public boolean isValidMove() {
-		if (currPiece.pieceType != ReturnPiece.PieceType.WQ || currPiece.pieceType != ReturnPiece.PieceType.BQ) { // if queen
+		/*if (currPiece.pieceType != ReturnPiece.PieceType.WQ || currPiece.pieceType != ReturnPiece.PieceType.BQ) { // if queen
 			return false;
-		}
+		}*/
 		
 		int fileDiff = tarFile - currFile;
 		int rankDiff = tarRank - currRank;

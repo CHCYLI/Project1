@@ -60,10 +60,8 @@ public class Chess {
 		/* FILL IN THIS METHOD */
 		if (move == "resign") return null; //resign, need revise here, what to return?
 		
-		
 		ReturnPlay temp = new ReturnPlay();
 		ReturnPiece tempPiece = new ReturnPiece();
-		
 		
 		if (move.charAt(0) == move.charAt(3) && move.charAt(1) == move.charAt(4)) { //same position
 			temp.piecesOnBoard = piecesList;
@@ -71,82 +69,123 @@ public class Chess {
 			return temp;
 		}
 		
-		Piece currPiece;
+		Piece thisPiece = null, lastPiece = null;
+		King whiteKing = null, blackKing = null;
 		
-		for (int i = 0; i < piecesList.size(); i++) { //move chess
+		int playerIsWhite;
+		if (currPlayer == Chess.Player.white) playerIsWhite = 1; //if curr player is white
+		else playerIsWhite = 0; //if black
+		
+		for (int i = 0; i < piecesList.size(); i++) { //find kings
+			ReturnPiece currReturnPiece = piecesList.get(i);
+			if (currReturnPiece.pieceType == ReturnPiece.PieceType.BK) { //if BK
+				blackKing = new King (currReturnPiece, move, piecesList);
+			}
+			else if (currReturnPiece.pieceType == ReturnPiece.PieceType.WK) { //if WK
+				whiteKing = new King (currReturnPiece, move, piecesList);
+			}
+		}
+		boolean spaceCheck = false;
+		for (int i = 0; i < piecesList.size(); i++) { //find piece
 			ReturnPiece currReturnPiece = piecesList.get(i);
 			
 			if (currReturnPiece.pieceFile.toString().charAt(0) == move.charAt(0) && //column
-					currReturnPiece.pieceRank == move.charAt(1) - '0') { //row //find the chess
-				
-				/*****************************create chess type******************************/
+				currReturnPiece.pieceRank == move.charAt(1) - '0') { // row //find the piece
+				spaceCheck = true;
+					/**create chess type**/
 					if (currReturnPiece.pieceType == ReturnPiece.PieceType.BK ||
-						currReturnPiece.pieceType == ReturnPiece.PieceType.WK) { //if king, create king
-						currPiece = new King (currReturnPiece, move, piecesList);
-							if (currPiece.isValidMove() == false) {
+						currReturnPiece.pieceType == ReturnPiece.PieceType.WK) { //if king
+							thisPiece = new King (currReturnPiece, move, piecesList);
+							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE);
+								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
 								return temp;
 							}
 					}
 					
-					if (currReturnPiece.pieceType == ReturnPiece.PieceType.BB ||
-							currReturnPiece.pieceType == ReturnPiece.PieceType.WB) { //if bishop, create bishop
-							currPiece = new Bishop (currReturnPiece, move, piecesList);
-							if (currPiece.isValidMove() == false) {
+					else if (currReturnPiece.pieceType == ReturnPiece.PieceType.BB ||
+						currReturnPiece.pieceType == ReturnPiece.PieceType.WB) { //if bishop
+							thisPiece = new Bishop (currReturnPiece, move, piecesList);
+							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE);
+								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
 								return temp;
 							}
 					}
 					
-					if (currReturnPiece.pieceType == ReturnPiece.PieceType.BN ||
-						currReturnPiece.pieceType == ReturnPiece.PieceType.WN) { //if knight, create knight
-							currPiece = new Knight (currReturnPiece, move, piecesList);
-							if (currPiece.isValidMove() == false) {
+					else if (currReturnPiece.pieceType == ReturnPiece.PieceType.BN ||
+						currReturnPiece.pieceType == ReturnPiece.PieceType.WN) { //if knight
+							thisPiece = new Knight (currReturnPiece, move, piecesList);
+							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE);
+								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
 								return temp;
 							}
 					}
 					
-					if (currReturnPiece.pieceType == ReturnPiece.PieceType.BP ||
-						currReturnPiece.pieceType == ReturnPiece.PieceType.WP) { //if pawn, create pawn
-							currPiece = new Pawn (currReturnPiece, move, piecesList);
-							if (currPiece.isValidMove() == false) {
+					else if (currReturnPiece.pieceType == ReturnPiece.PieceType.BP ||
+						currReturnPiece.pieceType == ReturnPiece.PieceType.WP) { //if pawn
+							thisPiece = new Pawn (currReturnPiece, move, piecesList);
+							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE);
+								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
 								return temp;
 							}
 					}
 					
-					if (currReturnPiece.pieceType == ReturnPiece.PieceType.BQ ||
-						currReturnPiece.pieceType == ReturnPiece.PieceType.WQ) { //if queen, create queen
-							Queen newQueen = new Queen (currReturnPiece, move, piecesList);
-							newQueen.isValidMove();
-							if (newQueen.isValidMove() == false) {
+					else if (currReturnPiece.pieceType == ReturnPiece.PieceType.BQ ||
+						currReturnPiece.pieceType == ReturnPiece.PieceType.WQ) { //if queen
+							thisPiece = new Queen (currReturnPiece, move, piecesList);
+							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE);
+								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
 								return temp;
 							}
 					}
 					
-					if (currReturnPiece.pieceType == ReturnPiece.PieceType.BR||
-						currReturnPiece.pieceType == ReturnPiece.PieceType.WR) { //if rook, create rook
-							currPiece = new Rook (currReturnPiece, move, piecesList);
-							if (currPiece.isValidMove() == false) {
+					else if (currReturnPiece.pieceType == ReturnPiece.PieceType.BR||
+						currReturnPiece.pieceType == ReturnPiece.PieceType.WR) { //if rook
+							thisPiece = new Rook (currReturnPiece, move, piecesList);
+							if (thisPiece.isValidMove() == false) {
 								temp.piecesOnBoard = piecesList;
-								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE);
+								System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
 								return temp;
 							}
 					}
-					/*****************************create chess type******************************/
-				
-					if (currPlayer.toString().charAt(0) - ' ' != currReturnPiece.pieceType.toString().charAt(0)) { //if the players move their own chess or the other's
+					else { //no Piece on that tile
 						temp.piecesOnBoard = piecesList;
 						System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
 						return temp;
 					}
+					
+					boolean requestedMoveValid = thisPiece.isValidMove();
+					System.out.println("testmessage");
+					System.out.println(thisPiece == null);
+					/**create chess type**/
+					
+					//if currColor != playerColor
+					if (thisPiece.isWhite != playerIsWhite) {
+						temp.piecesOnBoard = piecesList;
+						System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+						return temp;
+					}
+					
+					////if currColor != playerColor
+					if (thisPiece.tarFile > 8 || thisPiece.tarFile < 1 || thisPiece.tarRank > 8 || thisPiece.tarRank < 1) {
+						temp.piecesOnBoard = piecesList;
+						System.out.print(ReturnPlay.Message.ILLEGAL_MOVE); 
+						return temp;
+					}
+					
+					/**move**/
+					tempPiece.pieceType = currReturnPiece.pieceType; 
+					
+					tempPiece.pieceFile = findFile(move.charAt(3));
+					
+					tempPiece.pieceRank = move.charAt(4) - '0';
+					piecesList.remove(i);
+					piecesList.add(tempPiece);
+					/**move**/
 				
 					if (currReturnPiece.pieceType.toString() == "WK"|| currReturnPiece.pieceType.toString() == "BK") { //check castling
 						King tempKing = new King(currReturnPiece, move, piecesList);
@@ -159,15 +198,7 @@ public class Chess {
 						}
 					} 
 				
-					/***********move*************/
-					tempPiece.pieceType = piecesList.get(i).pieceType; 
 					
-					tempPiece.pieceFile = findFile(move.charAt(3));
-					
-					tempPiece.pieceRank = move.charAt(4) - '0';
-					piecesList.remove(i);
-					piecesList.add(tempPiece);
-					/***************move**************/
 					
 					/*************find enemy chess and kill it****************/
 					for (int j = 0; j < piecesList.size(); j++) {
@@ -181,7 +212,7 @@ public class Chess {
 					}
 					/*************find enemy chess and kill it****************/
 					
-					if (move.length() == 11 && move.substring(6, 11) == "draws?") { //propose draw
+					if (move.length() == 11 && move.substring(6, 11) == "draw?") { //propose draw
 						System.out.print(ReturnPlay.Message.DRAW);
 						return null; //need revise here, return ?
 					}
@@ -190,15 +221,22 @@ public class Chess {
 			
 			
 		}
+		if (spaceCheck == false) {
+			temp.piecesOnBoard = piecesList;
+			System.out.print("something here"+ReturnPlay.Message.ILLEGAL_MOVE); 
+			return temp;
+		}
 		
 		temp.piecesOnBoard = piecesList;
 		
 		if (currPlayer == Chess.Player.white) { //switch side
 			currPlayer = Chess.Player.black;
-		} else {
-			currPlayer = Chess.Player.white;
+			System.out.println("Change to black");
 		}
-		
+		else {
+			currPlayer = Chess.Player.white;
+			System.out.println("Change to white");
+		}
 		
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
@@ -332,6 +370,8 @@ public class Chess {
 	public static void start() {
 		/* FILL IN THIS METHOD */
 		ArrayList<ReturnPiece> pieces = new ArrayList<ReturnPiece>();
+		currPlayer = Chess.Player.white;
+		System.out.println("Setting player to white");
 		
 		for (int i = 1; i <= 32; i++) {
 			ReturnPiece temp = new ReturnPiece();

@@ -9,9 +9,9 @@ public class Knight extends Piece {
 	}
 	
 	public boolean isValidMove() {
-		if (currPiece.pieceType != ReturnPiece.PieceType.WN || currPiece.pieceType != ReturnPiece.PieceType.BN) {
+		/*if (currPiece.pieceType != ReturnPiece.PieceType.WN || currPiece.pieceType != ReturnPiece.PieceType.BN) {
 			return false;
-		}
+		}*/
 		
 		if (!this.isBlocked()) {
 			if (tarRank == currRank + 1 || tarRank == currRank - 1) {

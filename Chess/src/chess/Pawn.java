@@ -2,6 +2,7 @@ package chess;
 
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Pawn extends Piece {
 	ReturnPiece capturedPiece;
@@ -14,15 +15,15 @@ public class Pawn extends Piece {
 	
 	public Pawn(ReturnPiece currPiece, String move, ArrayList<ReturnPiece> list) {
 		super(currPiece,move,list);
-		if (tarPiece != null) {
+		if (!Objects.isNull(tarPiece)) {
 			tarColor = tarPiece.pieceType.toString().charAt(0); //'W' or 'B'
 		}
 	}
 	
 	public boolean isValidMove() {
-		if (currPiece.pieceType != ReturnPiece.PieceType.WP || currPiece.pieceType != ReturnPiece.PieceType.BP) {
+		/*if (currPiece.pieceType != ReturnPiece.PieceType.WP || currPiece.pieceType != ReturnPiece.PieceType.BP) {
 			return false;
-		}
+		}*/
 		
 		if (!this.isBlocked() && tarFile == currFile) { //target cell is empty & in same column(file)
 			//white
@@ -124,11 +125,13 @@ public class Pawn extends Piece {
 		}
 	
 	public boolean canPromote() {
-		if (isWhite == 1 && currRank == 7 && tarRank == 8) {
+		if (this.isValidMove()) {
+			if (isWhite == 1 && currRank == 7 && tarRank == 8) {
 				return true;
 			}
-		else if (isWhite == 0 && currRank == 2 && tarRank == 1) {
-			return true;
+			else if (isWhite == 0 && currRank == 2 && tarRank == 1) {
+				return true;
+			}
 		}
 		return false;
 	}

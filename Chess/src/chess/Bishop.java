@@ -46,9 +46,9 @@ public class Bishop extends Piece{
 	}
 	
 	public boolean isValidMove() {
-		if (currPiece.pieceType != ReturnPiece.PieceType.WB || currPiece.pieceType != ReturnPiece.PieceType.BB) { // if bishop
+		/*if (currPiece.pieceType != ReturnPiece.PieceType.WB || currPiece.pieceType != ReturnPiece.PieceType.BB) { // if bishop
 			return false;
-		}
+		}*/
 		
 		if (!this.isBlocked()) {
 			int fileDiff = tarFile - currFile;

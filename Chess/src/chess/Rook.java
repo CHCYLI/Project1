@@ -44,9 +44,9 @@ public class Rook extends Piece{
 	}
 	
 	public boolean isValidMove() {
-		if (currPiece.pieceType != ReturnPiece.PieceType.WR || currPiece.pieceType != ReturnPiece.PieceType.BR) { // if rook
+		/*if (currPiece.pieceType != ReturnPiece.PieceType.WR || currPiece.pieceType != ReturnPiece.PieceType.BR) { // if rook
 			return false;
-		}
+		}*/
 		
 		if (!this.isBlocked()) {
 			if (tarFile == currFile ^ tarRank == currRank) { //same file XOR same rank

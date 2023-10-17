@@ -16,9 +16,9 @@ public class King extends Piece{
 	
 	public boolean isValidMove() {
 
-		if (currPiece.pieceType != ReturnPiece.PieceType.WK || currPiece.pieceType != ReturnPiece.PieceType.BK) { // if king
+		/*if (currPiece.pieceType != ReturnPiece.PieceType.WK || currPiece.pieceType != ReturnPiece.PieceType.BK) { // if king
 			return false;
-		}
+		}*/
 		
 		if (!this.isBlocked()) {
 			int fileDiff = Math.abs(tarFile - currFile); 
